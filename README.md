@@ -1,5 +1,5 @@
-# Progetto di Introduzione al Pensiero Computazionale e alla Data Science
-Progetto di fine corso - Introduzione al Pensiero Computazionale e alla Data Science  
+# Progetto di Introduzione alla Data Science e al Pensiero Computazionale
+Progetto di fine corso - Introduzione alla Data Science e al Pensiero Computazionale 
 Università di Bologna - A.A. 2025/2026
 
 ## Descrizione
