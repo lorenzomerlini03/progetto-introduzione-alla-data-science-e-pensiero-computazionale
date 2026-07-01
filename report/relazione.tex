@@ -1,0 +1,168 @@
+\documentclass[11pt, a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[italian]{babel}
+\usepackage{graphicx} 
+\usepackage{hyperref}
+
+\title{\textbf{Report scientifico progetto\\Introduzione alla Data Science e al Pensiero Computazionale}\\[0.3cm] \large a.a. 2025/2026}
+\author{Gabriele Pio Girbino, Lorenzo Merlini}
+\date{\today}
+\usepackage{hyperref}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+L'employee attrition rappresenta una delle sfide più complesse per i dipartimenti di Risorse Umane. Questo progetto mira ad analizzare un set di dati aziendali per identificare i fattori chiave che spingono i dipendenti alle dimissioni e a sviluppare modelli di Machine Learning per prevedere tale fenomeno. Attraverso un'analisi esplorativa e l'addestramento di tre modelli predittivi (Regressione Logistica, k-NN e Random Forest), si è evidenziato come il salario mensile, l'età e l'esperienza lavorativa siano i fattori determinanti per l'ipotetico abbandono.
+
+\vspace{0.5cm}
+\textbf{Repository GitHub:} \url{https://github.com/lorenzomerlini03/progetto-introduzione-alla-data-science-e-pensiero-computazionale}
+\end{abstract}
+
+\newpage
+\tableofcontents
+\newpage
+
+\section{Introduzione}
+Il mantenimento dei dipendenti all'interno di un'azienda è fondamentale per garantire la continuità produttiva e ridurre i costi legati alla selezione e formazione di nuovo personale. L'obiettivo di questo elaborato è applicare i principi della Data Science per analizzare un dataset e prevedere l'abbandono dei dipendenti. 
+Il documento è strutturato partendo dal controllo preliminare e dalle statistiche del dataset (Sezione 2), passando per l'analisi visiva (Sezione 3) e la modellazione (Sezione 4), per terminare con l'analisi dei risultati (Sezione 5) e le conclusioni (Sezione 6). L'analisi è stata svolta in Python con le librerie pandas \cite{pandas}, NumPy \cite{numpy}, matplotlib \cite{matplotlib}, seaborn \cite{seaborn} e scikit-learn \cite{sklearn}.
+
+\section{Descrizione e comprensione del dataset}
+Il dataset analizzato è composto da 1470 dipendenti e 35 variabili, in cui la variabile target è \textit{Attrition} (Yes/No).
+
+\subsection{Domande e Ipotesi}
+Interrogando il dataset, abbiamo testato 8 ipotesi specifiche, ottenendo i seguenti risultati numerici:
+\begin{enumerate}
+    \item \textbf{Straordinari:} I dipendenti che fanno straordinari si dimettono in percentuale molto maggiore (30.5\%) rispetto a chi non ne fa (10.4\%).
+    \item \textbf{Età:} L'età influisce sull'abbandono. L'età media di chi ha lasciato l'azienda è di 33.6 anni, contro i 37.6 anni di chi è rimasto.
+    \item \textbf{Distanza:} La distanza casa-lavoro incide leggermente: chi si dimette percorre in media 10.6 km/miglia, contro gli 8.9 di chi resta.
+    \item \textbf{Stipendio:} Il reddito è un fattore critico. Lo stipendio medio mensile di chi ha lasciato è di 4787 dollari, contro i 6833 dollari di chi è rimasto.
+    \item \textbf{Soddisfazione:} Una soddisfazione lavorativa bassa (livelli 1-2) porta a un tasso di dimissioni del 19.7\%, contro il 13.9\% di chi ha un'alta soddisfazione (3-4).
+    \item \textbf{Promozioni:} Sorprendentemente, i dati smentiscono l'ipotesi dell'avanzamnto di carriera: chi si è dimesso ha ricevuto una promozione in media più di recente (1.9 anni fa) rispetto a chi è rimasto (2.2 anni fa).
+    \item \textbf{Ruoli:} I ruoli con il maggior numero assoluto di dimissioni sono Laboratory Technician (62), Sales Executive (57) e Research Scientist (47).
+    \item \textbf{Anzianità:} Tra i dimessi figurano sia neoassunti (0 anni) sia i veterani con 40 anni di servizio, dimostrando che l'attrition colpisce tutte le fasce.
+\end{enumerate}
+
+\subsection{Statistiche Descrittive}
+Per comprendere la popolazione aziendale, abbiamo estratto 5 blocchi di statistiche descrittive:
+\begin{enumerate}
+    \item \textbf{Profilo Demografico:} L'età media è 36.9 anni (min 18, max 60). Il 60\% è uomo, il 40\% donna. Il 45.8\% è sposato, il 32.0\% è single e il 22.2\% è divorziato.
+    \item \textbf{Distribuzione Salariale:} Lo stipendio mensile medio è di 6503 dollari (mediana 4919 dollari), con estremi da 1009 a 19999 dollari.
+    \item \textbf{Condizioni di Lavoro:} Il 71\% viaggia raramente, il 18.8\% frequentemente e il 10.2\% mai. Gli straordinari coinvolgono il 28.3\% del personale.
+    \item \textbf{Struttura Aziendale:} L'anzianità media è di 7.0 anni. Il dipartimento più grande è Ricerca \& Sviluppo (65.4\%), seguito da Vendite (30.3\%) e Risorse Umane (4.3\%).
+    \item \textbf{Esperienza Precedente:} I dipendenti hanno in media 11.3 anni di esperienza totale e hanno lavorato per 2.7 aziende prima di questa, mentre il numero massimo di aziende precedenti per un singolo dipendente è 9.
+\end{enumerate}
+
+\subsection{Riflessioni Critiche sui Dati}
+L'esplorazione tecnica ha fatto emergere tre riflessioni strutturali fondamentali per il Machine Learning:
+\begin{itemize}
+    \item \textbf{Sbilanciamento della variabile Attrition:} La classe target è fortemente sbilanciata (83.9\% "No" contro 16.1\% "Yes").
+    \item \textbf{Feature sospette:} Variabili come ad esempio \textit{EmployeeCount} e \textit{Over18} contengono un solo valore per tutti e sono prive di varianza.
+    \item \textbf{Formato testuale:} Ben 9 variabili oltre la variabile target sono in formato testuale, richiedendo una conversione numerica forzata.
+\end{itemize}
+
+\section{Analisi Esplorativa e Visualizzazione}
+Per dare valore alle statistiche, abbiamo utilizzato strumenti di visualizzazione grafica che hanno messo in luce relazioni complesse tra le variabili e il target. 
+
+Un esempio evidente riguarda l'equilibrio tra vita privata e lavorativa (Figura \ref{fig:wlb}). Utilizzando un Barplot percentuale, abbiamo scoperto che il tasso di abbandono arriva a superare il 30\% tra i dipendenti che dichiarano un "Pessimo" Work-Life Balance (Livello 1).
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.7\textwidth]{barplot.png}
+    \caption{Tasso di dimissioni in base all'equilibrio Vita-Lavoro.}
+    \label{fig:wlb}
+\end{figure}
+
+Un'altra visualizzazione chiave è stata ottenuta tramite un Istogramma (Figura \ref{fig:esperienza}), che ha risolto il problema della sovrapposizione dei dati per isolare il fenomeno dei profili con meno esperienza. Il grafico mostra chiaramente una gran numero di dimissioni concentrate nei primi 5-10 anni di carriera totale, che si azzera quasi completamente nei profili più esperti.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.7\textwidth]{histplot.png}
+    \caption{Distribuzione delle dimissioni per anni di esperienza lavorativa totale.}
+    \label{fig:esperienza}
+\end{figure}
+
+\section{Modellazione}
+
+\subsection{Preparazione del Dataset per la Modellazione}
+Prima dell'addestramento, le feature a varianza zero scoperte in Fase 2 sono state eliminate. Il target è stato mappato in binario (1=Yes, 0=No) e le variabili testuali sono state trasformate.
+Il dataset è stato diviso in Train (70\%) e Test (30\%) tramite campionamento stratificato. Infine, si è applicata la Standardizzazione, calcolata come:
+
+\begin{equation}
+    z = \frac{x - \mu}{\sigma}
+    \label{eq:standardizzazione}
+\end{equation}
+
+Questa formula garantisce media nulla e varianza unitaria per tutte le variabili numeriche.
+
+\subsection{Regressione Logistica}
+Il primo modello addestrato è stato un modello lineare: la Regressione Logistica. Trattandosi di un algoritmo basato sui coefficienti, ha beneficiato fortemente della standardizzazione descritta in Equazione \ref{eq:standardizzazione}.
+
+\subsection{K-Nearest Neighbors (k-NN}
+Il secondo modello è stato il k-NN, un algoritmo basato sul calcolo della distanza tra i valori "vicini". Anche in questo caso, la scalatura dei dati è stata cruciale.
+
+\subsection{Random Forest}
+L'ultimo algoritmo testato è la Random Forest, un modello non lineare basato su alberi decisionali. A differenza dei precedenti, questo modello è molto robusto e non necessita di standardizzazione.
+
+\section{Risultati e Discussione}
+
+\subsection{Confronto dei Modelli}
+La tabella seguente mette a confronto i tre modelli addestrati sul Test Set. 
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{|l|c|c|c|c|}
+        \hline
+        \textbf{Modello} & \textbf{Accuracy} & \textbf{Precision} & \textbf{Recall} & \textbf{F1-Score} \\
+        \hline
+        Regressione Logistica & 88.0\% & 72.5\% & 40.8\% & 52.3\% \\
+        k-NN & 83.9\% & 50.0\% & 7.0\% & 12.3\% \\
+        Random Forest & 83.4\% & 45.5\% & 14.1\% & 21.5\% \\
+        \hline
+    \end{tabular}
+    \caption{Confronto delle metriche di valutazione sul Test Set (Classe 'Yes').}
+    \label{tab:metriche}
+\end{table}
+
+\subsection{Spiegazione delle Metriche}
+Per interpretare correttamente la Tabella \ref{tab:metriche}, definiamo le metriche in relazione al nostro obiettivo:
+\begin{itemize}
+    \item \textbf{Accuracy:} La percentuale di tutte le previsioni corrette (sia i dipendenti rimasti, sia quelli dimessi). A causa dello sbilanciamento del dataset, è una metrica fuorviante.
+    \item \textbf{Precision:} Su tutti i dipendenti che il modello ha previsto come dimissionari, quanti si sono licenziati davvero.
+    \item \textbf{Recall:} Su tutti i dipendenti che effettivamente si sono licenziati, quanti il modello è riuscito a trovarne. Si tratta della metrica più importante.
+    \item \textbf{F1-Score:} È la media tra Precision e Recall, utile per valutare l'equilibrio del modello.
+\end{itemize}
+
+\subsection{Approfondimenti sui Modelli}
+Per conludere la fase di modellazione, abbiamo estratto i \textit{coefficienti} della Regressione Logistica (che ci dicono se una variabile spinge verso il Sì o verso il No) e la \textit{Feature Importance} della Random Forest. Quest'ultima ha decretato che il reddito mensile (\textit{MonthlyIncome}) e l'età (\textit{Age}) sono le variabili più importanti per l'algoritmo.
+
+\section{Conclusioni}
+Il progetto ha dimostrato che le dimissioni aziendali sono prevedibili analizzando variabili chiare come lo stipendio, gli straordinari e l'età. 
+I modelli di Machine Learning hanno faticato a identificare tutti i dimessi (bassa Recall) a causa del forte sbilanciamento delle classi nel dataset iniziale. La Regressione Logistica si è rivelato il modello migliore e più equilibrato per affrontare il problema. 
+Durante lo sviluppo del progetto, l'Intelligenza Artificiale è stata impiegata come strumento di supporto per la formulazione di spunti e ipotesi esplorative all'interno del notebook Colab, nonché per la revisione linguistica e l'ottimizzazione formale di alcune sezioni di questo report.
+
+\begin{thebibliography}{9}
+
+\bibitem{slides_poggi} 
+Poggi, F. \textit{Slide e materiale didattico del corso "Introduzione alla Data Science e al Pensiero Computazionale"}. Alma Mater Studiorum - Università di Bologna.
+
+\bibitem{pandas}
+McKinney, W. (2010). \textit{pandas: libreria Python per l'analisi dei dati}.
+
+\bibitem{numpy}
+Harris, C. R. et al. (2020). \textit{NumPy: calcolo numerico in Python}.
+
+\bibitem{matplotlib}
+Hunter, J. D. (2007). \textit{Matplotlib: libreria per la visualizzazione dei dati}.
+
+\bibitem{seaborn}
+Waskom, M. L. (2021). \textit{Seaborn: visualizzazione statistica dei dati}.
+
+\bibitem{sklearn}
+Pedregosa, F. et al. (2011). \textit{Scikit-learn: machine learning in Python}.
+
+\end{thebibliography}
+
+\end{document}
