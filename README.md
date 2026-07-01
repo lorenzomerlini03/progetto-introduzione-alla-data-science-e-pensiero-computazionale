@@ -8,10 +8,10 @@ Il lavoro include analisi esplorativa, visualizzazione, modellazione
 con tecniche di machine learning e valutazione critica dei risultati.
 
 ## Dataset
-- *Nome:* [IBM HR Analytics]
-- *Righe:* [1470]
-- *Colonne:* [35]
-- *Variabile target:* [Attrition]
+- *Nome:* IBM HR Analytics
+- *Righe:* 1470
+- *Colonne:* 35
+- *Variabile target:* Attrition
 
 1470 dipendenti, 35 variabili. Target sbilanciato (83.9% restano, 16.1% se ne vanno).
 
@@ -21,9 +21,9 @@ dipendenti alle dimissioni e a sviluppare modelli di Machine Learning
 per prevedere tale fenomeni
 
 ## Modelli usati
-- [Regressione Logistica]
-- [K-Nearest Neighbors]
-- [Random Forest]
+- Regressione Logistica
+- K-Nearest Neighbors
+- Random Forest
 
 ## Struttura del repository
 - data/ — il dataset
