@@ -16,9 +16,9 @@ con tecniche di machine learning e valutazione critica dei risultati.
 1470 dipendenti, 35 variabili. Target sbilanciato (83.9% restano, 16.1% se ne vanno).
 
 ## Obiettivo
-[Analizzare un set di dati aziendali per identificare i fattori chiave che spingono i
+Analizzare un set di dati aziendali per identificare i fattori chiave che spingono i
 dipendenti alle dimissioni e a sviluppare modelli di Machine Learning
-per prevedere tale fenomeni]
+per prevedere tale fenomeni
 
 ## Modelli usati
 - [Regressione Logistica]
